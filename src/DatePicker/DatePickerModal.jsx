@@ -16,8 +16,8 @@ export default class DatePickerModal extends PureComponent {
     autoOk: PropTypes.bool,
     disableFuture: PropTypes.bool,
     animateYearScrolling: PropTypes.bool,
-    openToYearSelection: PropTypes.bool,
-  }
+    openToYearSelection: PropTypes.bool
+  };
 
   static defaultProps = {
     minDate: '1900-01-01',
@@ -27,38 +27,39 @@ export default class DatePickerModal extends PureComponent {
     autoOk: false,
     disableFuture: false,
     animateYearScrolling: false,
-    openToYearSelection: false,
-  }
+    openToYearSelection: false
+  };
 
   state = {
     open: false,
-    date: moment(this.props.value),
-  }
+    date: this.props.value ? moment(this.props.value) : moment()
+  };
 
   togglePicker = () => {
     this.setState({ open: !this.state.open });
-  }
+  };
 
-  handleChange = (date) => {
+  handleChange = date => {
     this.setState({ date }, () => {
       if (this.props.autoOk) {
         this.handleAccept();
       }
     });
-  }
+  };
 
   handleAccept = () => {
     this.props.onChange(this.state.date);
     this.togglePicker(); // close
-  }
+  };
 
   handleDismiss = () => {
+    /*
     this.setState({
-      date: moment(this.props.value),
+      date: this.props.value ? moment(this.props.value) : moment()
     });
-
+    */
     this.togglePicker();
-  }
+  };
 
   render() {
     const { date } = this.state;
@@ -77,18 +78,9 @@ export default class DatePickerModal extends PureComponent {
 
     return (
       <span>
-        <DateTextField
-          value={value}
-          format={format}
-          onClick={this.togglePicker}
-          {...other}
-        />
+        <DateTextField value={value} format={format} onClick={this.togglePicker} {...other} />
 
-        <ModalDialog
-          open={this.state.open}
-          onAccept={this.handleAccept}
-          onDismiss={this.handleDismiss}
-        >
+        <ModalDialog open={this.state.open} onAccept={this.handleAccept} onDismiss={this.handleDismiss}>
           <DatePicker
             date={date}
             onChange={this.handleChange}
